@@ -1,27 +1,36 @@
 'use strict';
 
-var style = require('./style.js');
-var Count = require('./Count.js');
+var One = require('./One.js');
+var Two = require('./Two.js');
 var React = require('react-native');
 var {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View
+  Navigator
 } = React;
 
-var testing = React.createClass({
+var NavigatorApp = React.createClass({
 
   render: function() {
 
     return (
-      <View style={styles.container}>
-        <Count initVal={1}/>
-      </View>
+      <Navigator
+        initialRoute={{name: 'one', index: 0}}
+        renderScene={(route, navigator) => {
+
+          if (route.name === 'one') {
+              return <One goTwo={() => {
+                  navigator.push({
+                    name: 'two',
+                    index: 1
+                  });
+                }}/>;
+            } else {
+              return <Two goOne={() => navigator.pop() }/>;
+            }
+          }}
+      />
     );
   }
 });
 
-var styles = StyleSheet.create(style);
-
-AppRegistry.registerComponent('testing', () => testing);
+AppRegistry.registerComponent('testing', () => NavigatorApp);
