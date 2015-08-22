@@ -39,7 +39,28 @@ var Square = React.createClass({
   getStyle () {
     return [
         styles.square,
-        {transform: this.state.pan.getTranslateTransform()}
+        {
+            transform: [
+                {
+                    translateX: this.state.pan.x
+                },
+                {
+                    translateY: this.state.pan.y
+                },
+                {
+                    rotate: this.state.pan.x.interpolate({
+                        inputRange: [-200, 0, 200],
+                        outputRange: ['-30deg', '0deg', '30deg']
+                    })
+                }
+            ]
+        },
+        {
+            opacity: this.state.pan.x.interpolate({
+                inputRange: [-200, 0, 200],
+                outputRange: [0.5, 1, 0.5]
+            })
+        }
     ];
   },
   render () {
