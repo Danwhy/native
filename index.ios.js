@@ -26,10 +26,24 @@ var Square = React.createClass({
   },
   componentDidMount () {
 
-    Animated.spring(this.state.pan, {
-        ...SPRING_CONFIG,
-        toValue: {x: 0, y: height - SQUARE_DIM}
-    }).start(function (obj) {
+    Animated.sequence([
+        Animated.spring(this.state.pan, {
+            ...SPRING_CONFIG,
+            toValue: {x: 0, y: height - SQUARE_DIM}
+        }),
+        Animated.spring(this.state.pan, {
+            ...SPRING_CONFIG,
+            toValue: {x: width - SQUARE_DIM, y: height - SQUARE_DIM}
+        }),
+        Animated.spring(this.state.pan, {
+            ...SPRING_CONFIG,
+            toValue: {x: width - SQUARE_DIM, y: 0}
+        }),
+        Animated.spring(this.state.pan, {
+            ...SPRING_CONFIG,
+            toValue: {x: 0, y: 0}
+        })
+    ]).start(function (obj) {
 
         console.log('Completation callback: ', obj);
     });
