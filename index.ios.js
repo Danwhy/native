@@ -30,7 +30,9 @@ var Square = React.createClass({
             null, {dx: this.state.pan.x, dy: this.state.pan.y}
         ]),
         onPanResponderRelease: () => {
-            this.state.pan.flattenOffset();
+            Animated.spring(this.state.pan, {
+                toValue: 0
+            }).start();
         }
     });
   },
