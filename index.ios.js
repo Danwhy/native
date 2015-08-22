@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react-native');
-var Dimensions = require('Dimensions');
 var {
   AppRegistry,
   StyleSheet,
@@ -9,13 +8,7 @@ var {
   View
 } = React;
 
-var {
-    width,
-    height
-} = Dimensions.get('window');
-
-var SQUARE_DIM = 60;
-var SPRING_CONFIG = {tension: 1, friction: 7};
+var SQUARE_DIM = 100;
 
 var Square = React.createClass({
 
@@ -23,35 +16,6 @@ var Square = React.createClass({
     return {
       pan: new Animated.ValueXY()
     };
-  },
-  componentDidMount () {
-
-    this.startAndRepeat();
-  },
-  startAndRepeat () {
-
-    this.triggerAnimation(this.startAndRepeat);
-  },
-  triggerAnimation (callback) {
-
-    Animated.sequence([
-        Animated.spring(this.state.pan, {
-            ...SPRING_CONFIG,
-            toValue: {x: 0, y: height - SQUARE_DIM}
-        }),
-        Animated.spring(this.state.pan, {
-            ...SPRING_CONFIG,
-            toValue: {x: width - SQUARE_DIM, y: height - SQUARE_DIM}
-        }),
-        Animated.spring(this.state.pan, {
-            ...SPRING_CONFIG,
-            toValue: {x: width - SQUARE_DIM, y: 0}
-        }),
-        Animated.spring(this.state.pan, {
-            ...SPRING_CONFIG,
-            toValue: {x: 0, y: 0}
-        })
-    ]).start(callback);
   },
   getStyle () {
     return [
@@ -71,7 +35,9 @@ var Square = React.createClass({
 
 var styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     square: {
         width: SQUARE_DIM,
