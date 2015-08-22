@@ -1,27 +1,65 @@
 'use strict';
 
-var style = require('./style.js');
-var Count = require('./Count.js');
 var React = require('react-native');
+var Dimensions = require('Dimensions');
 var {
   AppRegistry,
   StyleSheet,
-  Text,
+  Animated,
   View
 } = React;
 
-var testing = React.createClass({
+var {
+    width,
+    height
+} = Dimensions.get('window');
 
-  render: function() {
+var SQUARE_DIM = 60;
+var SPRING_CONFIG = {tension: 2, friction: 3};
+
+var Square = React.createClass({
+
+  getInitialState () {
+    return {
+      pan: new Animated.ValueXY()
+    };
+  },
+  componentDidMount () {
+
+    Animated.spring(this.state.pan, {
+        ...SPRING_CONFIG,
+        toValue: {x: 0, y: height - SQUARE_DIM}
+    }).start(function (obj) {
+
+        console.log('Completation callback: ', obj);
+    });
+  },
+  getStyle () {
+    return [
+        styles.square,
+        {transform: this.state.pan.getTranslateTransform()}
+    ];
+  },
+  render () {
 
     return (
       <View style={styles.container}>
-        <Count initVal={1}/>
+        <Animated.View style={this.getStyle()} />
       </View>
     );
   }
 });
 
-var styles = StyleSheet.create(style);
+var styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    square: {
+        width: SQUARE_DIM,
+        height: SQUARE_DIM,
+        backgroundColor: 'blue'
+    }
+});
 
-AppRegistry.registerComponent('testing', () => testing);
+AppRegistry.registerComponent('testing', () => Square);
+
