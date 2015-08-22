@@ -15,7 +15,7 @@ var {
 } = Dimensions.get('window');
 
 var SQUARE_DIM = 60;
-var SPRING_CONFIG = {tension: 2, friction: 3};
+var SPRING_CONFIG = {tension: 1, friction: 7};
 
 var Square = React.createClass({
 
@@ -25,6 +25,14 @@ var Square = React.createClass({
     };
   },
   componentDidMount () {
+
+    this.startAndRepeat();
+  },
+  startAndRepeat () {
+
+    this.triggerAnimation(this.startAndRepeat);
+  },
+  triggerAnimation (callback) {
 
     Animated.sequence([
         Animated.spring(this.state.pan, {
@@ -43,10 +51,7 @@ var Square = React.createClass({
             ...SPRING_CONFIG,
             toValue: {x: 0, y: 0}
         })
-    ]).start(function (obj) {
-
-        console.log('Completation callback: ', obj);
-    });
+    ]).start(callback);
   },
   getStyle () {
     return [
