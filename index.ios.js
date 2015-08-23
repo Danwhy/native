@@ -5,10 +5,15 @@ var {
   AppRegistry,
   StyleSheet,
   PanResponder,
+  Text,
   View
 } = React;
 
 var Pan = React.createClass({
+
+  _styles: {},
+  _previousLeft: 40,
+  _previousTop: 100,
 
   componentWillMount: function () {
 
@@ -17,20 +22,38 @@ var Pan = React.createClass({
           onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
           onMoveShouldSetPanResponder: (evt, gestureState) => true,
           onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-          onPanResponderGrant: (evt, gestureState) => console.log('start'),
-          onPanResponderMove: (evt, gestureState) => console.log('move'),
+          onPanResponderGrant: (evt, gestureState) => console.log(gestureState),
+          onPanResponderMove: (evt, gestureState) => this.move(gestureState),
           onPanResponderTerminationRequest: (evt, gestureState) => true,
-          onPanResponderRelease: (evt, gestureState) => console.log('end'),
+          onPanResponderRelease: (evt, gestureState) => this.end(gestureState),
           onPanResponderTerminate: (evt, gestureState) => console.log('start'),
           onShouldBlockNativeResponder: (evt, gestureState) => true
       });
+  },
+
+  _updatePosition: function() {
+
+    this._root && this._root.setNativeProps(this._styles);
+  },
+
+  move(gestureState) {
+
+    this._styles.left = this._previousLeft + gestureState.dx;
+    this._styles.top = this._previousTop + gestureState.dy;
+    this._updatePosition();
+  },
+
+  end(gestureState) {
+
+    this._previousLeft += gestureState.dx;
+    this._previousTop += gestureState.dy;
   },
 
   render: function() {
 
     return (
       <View style={styles.container}>
-        <View style={styles.circle} {...this._panResponder.panHandlers} />
+        <View ref={component => this._root = component} style={styles.circle} {...this._panResponder.panHandlers} />
       </View>
     );
   }
@@ -38,6 +61,9 @@ var Pan = React.createClass({
 
 var styles = StyleSheet.create({
   circle: {
+    position: 'absolute',
+    top: 100,
+    left: 40,
     width: 300,
     height: 300,
     backgroundColor: '#ffeeff',
