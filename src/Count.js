@@ -8,7 +8,9 @@ var {
 } = React;
 
 var Count = React.createClass({
-
+  propTypes: {
+    initVal: React.PropTypes.number
+  },
   getInitialState: function() {
 
     return {
