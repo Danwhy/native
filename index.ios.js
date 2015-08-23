@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react-native');
+var clamp = require('clamp');
+
 var {
   AppRegistry,
   StyleSheet,
@@ -72,9 +74,18 @@ var Square = React.createClass({
 
             console.log('gestureState', vx, vy);
 
+            var velocity;
+
+            if (vx > 0) {
+                velocity = clamp(vx, 3, 5);
+            } else if (vx < 0) {
+                velocity = clamp(vx * -1, 3, 5) * -1;
+            }
+
             if (Math.abs(this.state.pan.x.getAnimatedValue()) > SWIPE_THRESHOLD) {
                 Animated.decay(this.state.pan.x, {
-                    velocity: 1
+                    velocity: velocity,
+                    deceleration: 0.98
                 }).start(() => {
 
                     console.log('Done x');
@@ -82,7 +93,8 @@ var Square = React.createClass({
                 }.bind(this));
 
                 Animated.decay(this.state.pan.y, {
-                    velocity: 1
+                    velocity: velocity,
+                    deceleration: 0.985
                 }).start(() => {
 
                     console.log('Done y');
@@ -138,11 +150,11 @@ var Square = React.createClass({
             style={
                 [
                     styles.card,
-                    animatedCardStyles,
+                    this.getStyle(),
                     {backgroundColor: this.state.card}
                 ]
-                {...this._panResponder.panHandlers}
             }
+            {...this._panResponder.panHandlers}
         />
       </View>
     );
