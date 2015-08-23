@@ -8,6 +8,7 @@ var {
   StyleSheet,
   Animated,
   View,
+  Text,
   PanResponder
 } = React;
 
@@ -155,7 +156,9 @@ var Square = React.createClass({
                 ]
             }
             {...this._panResponder.panHandlers}
-        />
+        >
+            <Text>Hello world!</Text>
+        </Animated.View>
       </View>
     );
   }
